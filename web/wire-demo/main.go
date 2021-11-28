@@ -1,5 +1,7 @@
 package main
 
-func main() {
+import "wire-demo/internal/app"
 
+func main() {
+	app.BuildInjector()
 }
