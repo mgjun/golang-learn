@@ -1,4 +1,4 @@
-package controller
+package user
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,16 +10,16 @@ type User struct {
 	Name string `json:"name" binding:"required"`
 }
 
-var Users = []User{{Id: "123", Name: "张三"}, {Id: "456", Name: "李四"}}
+var Users = []User{{Id: "123", Name: "张三1"}, {Id: "456", Name: "李四1"}}
 
-func GetUsers(r *gin.Engine, path string) {
-	r.GET(path, func(c *gin.Context) {
+func GetUsers() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		c.JSON(http.StatusOK, Users)
-	})
+	}
 }
 
-func CreateUser(r *gin.Engine, path string) {
-	r.POST(path, func(c *gin.Context) {
+func CreateUser() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		var user User
 		if err := c.ShouldBindJSON(&user); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -27,12 +27,11 @@ func CreateUser(r *gin.Engine, path string) {
 		}
 		Users := append(Users, user)
 		c.JSON(http.StatusOK, Users)
-		return
-	})
+	}
 }
 
-func ModifyUserId(r *gin.Engine, path string) {
-	r.PUT(path, func(c *gin.Context) {
+func ModifyUserId() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		var modifyUser User
 		if err := c.ShouldBindJSON(&modifyUser); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -46,11 +45,11 @@ func ModifyUserId(r *gin.Engine, path string) {
 		}
 		c.JSON(http.StatusOK, Users)
 		return
-	})
+	}
 }
 
-func DeleteUserById(r *gin.Engine, path string) {
-	r.DELETE(path, func(c *gin.Context) {
+func DeleteUserById() gin.HandlerFunc {
+	return func(c *gin.Context) {
 		id := c.Param("id")
 		var newUsers []User
 		for i := 0; i < len(Users); i++ {
@@ -61,5 +60,5 @@ func DeleteUserById(r *gin.Engine, path string) {
 		}
 		c.JSON(http.StatusOK, newUsers)
 		return
-	})
+	}
 }
